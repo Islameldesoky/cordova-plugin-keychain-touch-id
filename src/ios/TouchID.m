@@ -25,32 +25,13 @@
 @implementation TouchID
 
 - (void)isAvailable:(CDVInvokedUrlCommand*)command{
-    if (NSClassFromString(@"LAContext") == NULL) {
-        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-        return;
-    }
-    
     self.laContext = [[LAContext alloc] init];
-    
-    if ([self.laContext canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil]) {
-        NSString *biometryType = @"";
-        if (@available(iOS 11.0, *)) {
-            if (self.laContext.biometryType == LABiometryTypeFaceID) {
-                biometryType = @"face";
-            }
-            else {
-                biometryType = @"touch";
-            }
-            CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:biometryType];
-            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-        }
-        else {
-            CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: @"touch"];
-            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-        }
+    BOOL touchIDAvailable = [self.laContext canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil];
+    if(touchIDAvailable){
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }
-    else {
+    else{
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: @"Touch ID not available"];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }
@@ -167,4 +148,5 @@
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }
 }
+
 @end
