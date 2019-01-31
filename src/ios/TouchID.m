@@ -117,8 +117,8 @@
                         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                         NSData *oldDomainState = [defaults objectForKey:@"domainTouchID"];
                         
-                        if (oldDomainState) {
-                            if ([oldDomainState isEqual: domainState]) {
+                        
+                            if (!oldDomainState || [oldDomainState isEqual: domainState]) {
                                 NSString *password = [self.MyKeychainWrapper myObjectForKey:@"v_Data"];
                                 CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: password];
                                 [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -126,7 +126,7 @@
                                 CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: @"KeyPermanentlyInvalidatedException"];
                                 [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
                             }
-                        }
+                        
                         [defaults setObject: domainState forKey:@"domainTouchID"];
                         [defaults synchronize];
                     }
