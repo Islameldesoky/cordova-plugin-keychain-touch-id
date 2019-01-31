@@ -43,6 +43,10 @@
             <uses-permission android:name="android.permission.USE_FINGERPRINT" />
             <!--<uses-sdk android:minSdkVersion="23" android:targetSdkVersion="23" />-->
         </config-file>
+	    
+	<config-file parent="NSFaceIDUsageDescription" target="*-Info.plist">
+            <string>Use FaceID in Application Login</string>
+	</config-file>
 
         <source-file src="src/android/FingerprintAuth.java" target-dir="src/com/cordova/plugin/android/fingerprintauth" />
         <source-file src="src/android/FingerprintAuthenticationDialogFragment.java" target-dir="src/com/cordova/plugin/android/fingerprintauth" />
